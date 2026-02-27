@@ -9,7 +9,7 @@ function App() {
       <header className="border-b border-gray-200 bg-white shadow-sm">
         <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6">
           <Link to="/" className="text-xl font-bold text-gray-900">
-            Recipe App
+            App
           </Link>
         </div>
       </header>
