@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* Mobile-first base: narrow viewport default */
+@theme {
+  --font-sans: system-ui, -apple-system, sans-serif;
+}
+
+body {
+  @apply min-h-screen min-w-[320px] text-base antialiased;
+  font-size: 16px; /* readable on mobile */
+}
+
+/* Touch-friendly: minimum 44px tap targets */
+button, a[role="button"], .tap-target {
+  @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+}
