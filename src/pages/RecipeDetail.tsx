@@ -11,14 +11,18 @@ const unitLabels: Record<IngredientUnit, string> = {
   pinch: 'szczypta',
 }
 
-function formatIngredient(ing: Ingredient): string {
+function formatQuantity(value: number): string {
+  return value % 1 === 0 ? String(value) : value.toFixed(1).replace('.', ',')
+}
+
+function formatIngredient(ing: Ingredient, multiplier: number): string {
   const unit = unitLabels[ing.unit]
+  const qty = ing.quantity * multiplier
   if (ing.unit === 'piece' || ing.unit === 'pinch') {
-    const qty = ing.quantity
     if (qty === 1) return `${ing.name} (${unit})`
-    return `${ing.name} – ${qty} ${unit}`
+    return `${ing.name} – ${formatQuantity(qty)} ${unit}`
   }
-  return `${ing.name} – ${ing.quantity} ${unit}`
+  return `${ing.name} – ${formatQuantity(qty)} ${unit}`
 }
 
 export function RecipeDetail() {
@@ -26,6 +30,7 @@ export function RecipeDetail() {
   const [recipe, setRecipe] = useState<Recipe | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [multiplier, setMultiplier] = useState(1)
 
   useEffect(() => {
     if (!id) {
@@ -81,7 +86,9 @@ export function RecipeDetail() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">{recipe.title}</h1>
           {recipe.calories != null && (
-            <p className="mt-1 text-lg text-gray-600">{recipe.calories} kcal</p>
+            <p className="mt-1 text-lg text-gray-600">
+              {Math.round(recipe.calories * multiplier)} kcal
+            </p>
           )}
         </div>
         <Link
@@ -93,6 +100,21 @@ export function RecipeDetail() {
             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
           </svg>
         </Link>
+      </div>
+
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <label htmlFor="multiplier" className="text-sm font-medium text-gray-700">
+          Mnożnik
+        </label>
+        <input
+          id="multiplier"
+          type="number"
+          min={0.5}
+          step={0.5}
+          value={multiplier}
+          onChange={(e) => setMultiplier(Math.max(0.5, Number(e.target.value) || 1))}
+          className="w-20 rounded-lg border border-gray-300 px-3 py-2 text-base shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        />
       </div>
 
       {recipe.description?.trim() && (
@@ -111,7 +133,7 @@ export function RecipeDetail() {
           </h2>
           <ul className="list-inside list-disc space-y-1.5 text-gray-700">
             {validIngredients.map((ing, index) => (
-              <li key={index}>{formatIngredient(ing)}</li>
+              <li key={index}>{formatIngredient(ing, multiplier)}</li>
             ))}
           </ul>
         </section>
