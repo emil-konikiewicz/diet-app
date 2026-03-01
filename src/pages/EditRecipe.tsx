@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RecipeForm } from '../components/RecipeForm'
 import { supabase } from '../lib/supabase'
-import type { Recipe } from '../types/recipe'
+import type { Recipe, IngredientUnit } from '../types/recipe'
 
 export function EditRecipe() {
   const { id } = useParams<{ id: string }>()
@@ -26,7 +26,7 @@ export function EditRecipe() {
         if (err) throw err
         setRecipe(data as Recipe)
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Failed to load recipe')
+        setError(e instanceof Error ? e.message : 'Nie udało się załadować przepisu')
       } finally {
         setLoading(false)
       }
@@ -37,7 +37,7 @@ export function EditRecipe() {
   async function handleSubmit(data: {
     title: string
     description: string
-    ingredients: { name: string; quantity: number; unit: 'piece' | 'grams' }[]
+    ingredients: { name: string; quantity: number; unit: IngredientUnit }[]
     calories: number | null
   }) {
     if (!id) return
@@ -56,7 +56,7 @@ export function EditRecipe() {
 
   async function handleDelete() {
     if (!id) return
-    if (!window.confirm('Delete this recipe?')) return
+    if (!window.confirm('Usunąć ten przepis?')) return
     const { error: err } = await supabase.from('recipes').delete().eq('id', id)
     if (err) throw err
     navigate('/')
@@ -65,7 +65,7 @@ export function EditRecipe() {
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <p className="text-gray-500">Loading…</p>
+        <p className="text-gray-500">Ładowanie…</p>
       </div>
     )
   }
@@ -73,13 +73,13 @@ export function EditRecipe() {
   if (error || !recipe) {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
-        <p>{error ?? 'Recipe not found'}</p>
+        <p>{error ?? 'Nie znaleziono przepisu'}</p>
         <button
           type="button"
           onClick={() => navigate('/')}
           className="mt-2 text-sm font-medium text-blue-600 hover:underline"
         >
-          Back to list
+          Wróć do listy
         </button>
       </div>
     )
@@ -88,19 +88,20 @@ export function EditRecipe() {
   return (
     <div className="mx-auto max-w-xl">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Edit recipe</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Edytuj przepis</h1>
         <button
           type="button"
           onClick={handleDelete}
-          className="tap-target rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-red-700 hover:bg-red-100"
+          className="tap-target flex items-center justify-center rounded-lg border border-red-300 bg-red-50 px-4 py-2 text-xl font-medium text-red-700 hover:bg-red-100"
+          aria-label="Usuń przepis"
         >
-          Delete
+          ×
         </button>
       </div>
       <RecipeForm
         initial={recipe}
         onSubmit={handleSubmit}
-        submitLabel="Update recipe"
+        submitLabel="Zaktualizuj przepis"
       />
     </div>
   )

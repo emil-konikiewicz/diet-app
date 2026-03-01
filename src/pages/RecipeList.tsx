@@ -19,7 +19,7 @@ export function RecipeList() {
         if (err) throw err
         setRecipes((data as Recipe[]) ?? [])
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Failed to load recipes')
+        setError(e instanceof Error ? e.message : 'Nie udało się załadować przepisów')
       } finally {
         setLoading(false)
       }
@@ -30,7 +30,7 @@ export function RecipeList() {
   if (loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <p className="text-gray-500">Loading recipes…</p>
+        <p className="text-gray-500">Ładowanie przepisów…</p>
       </div>
     )
   }
@@ -39,7 +39,7 @@ export function RecipeList() {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
         <p>{error}</p>
-        <p className="mt-2 text-sm">Check your Supabase URL and anon key in .env</p>
+        <p className="mt-2 text-sm">Sprawdź adres Supabase i klucz anon w pliku .env</p>
       </div>
     )
   }
@@ -47,18 +47,18 @@ export function RecipeList() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Recipes</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Przepisy</h1>
         <Link
           to="/recipe/new"
           className="tap-target rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
         >
-          Add recipe
+          Dodaj przepis
         </Link>
       </div>
 
       {recipes.length === 0 ? (
         <p className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center text-gray-600">
-          No recipes yet. Add your first one.
+          Brak przepisów. Dodaj pierwszy.
         </p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

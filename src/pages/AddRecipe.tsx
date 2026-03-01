@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { RecipeForm } from '../components/RecipeForm'
 import { supabase } from '../lib/supabase'
+import type { IngredientUnit } from '../types/recipe'
 
 export function AddRecipe() {
   const navigate = useNavigate()
@@ -8,7 +9,7 @@ export function AddRecipe() {
   async function handleSubmit(data: {
     title: string
     description: string
-    ingredients: { name: string; quantity: number; unit: 'piece' | 'grams' }[]
+    ingredients: { name: string; quantity: number; unit: IngredientUnit }[]
     calories: number | null
   }) {
     const { error } = await supabase.from('recipes').insert({
@@ -23,8 +24,8 @@ export function AddRecipe() {
 
   return (
     <div className="mx-auto max-w-xl">
-      <h1 className="mb-4 text-2xl font-bold text-gray-900">Add recipe</h1>
-      <RecipeForm onSubmit={handleSubmit} submitLabel="Save recipe" />
+      <h1 className="mb-4 text-2xl font-bold text-gray-900">Dodaj przepis</h1>
+      <RecipeForm onSubmit={handleSubmit} submitLabel="Zapisz przepis" />
     </div>
   )
 }

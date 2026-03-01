@@ -1,4 +1,4 @@
-export type IngredientUnit = 'piece' | 'grams'
+export type IngredientUnit = 'piece' | 'grams' | 'tablespoon' | 'teaspoon' | 'pinch'
 
 export interface Ingredient {
   name: string

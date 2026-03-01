@@ -57,7 +57,7 @@ export function RecipeForm({ initial, onSubmit, submitLabel }: RecipeFormProps) 
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-          Title *
+          Tytuł *
         </label>
         <input
           id="title"
@@ -71,7 +71,7 @@ export function RecipeForm({ initial, onSubmit, submitLabel }: RecipeFormProps) 
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-          Description
+          Opis
         </label>
         <textarea
           id="description"
@@ -84,54 +84,57 @@ export function RecipeForm({ initial, onSubmit, submitLabel }: RecipeFormProps) 
 
       <div>
         <div className="flex items-center justify-between">
-          <label className="block text-sm font-medium text-gray-700">Ingredients</label>
+          <label className="block text-sm font-medium text-gray-700">Składniki</label>
           <button
             type="button"
             onClick={addIngredient}
             className="text-sm font-medium text-blue-600 hover:text-blue-800"
           >
-            + Add row
+            + Dodaj wiersz
           </button>
         </div>
         <div className="mt-2 space-y-2">
           {ingredients.map((ing, index) => (
             <div
               key={index}
-              className="flex flex-wrap items-end gap-2 rounded-lg border border-gray-200 bg-gray-50 p-2 sm:flex-nowrap"
+              className="flex flex-wrap gap-2 rounded-lg border border-gray-200 bg-gray-50 p-2 sm:flex-nowrap"
             >
               <input
                 type="text"
-                placeholder="Name"
+                placeholder="Nazwa"
                 value={ing.name}
                 onChange={(e) => updateIngredient(index, 'name', e.target.value)}
-                className="min-w-0 flex-1 rounded border border-gray-300 px-2 py-2 text-base sm:flex-none sm:flex-1"
+                className="flex-1 min-w-0 rounded border border-gray-300 px-2 py-2 text-base"
               />
               <input
                 type="number"
                 min={0}
-                step={0.1}
-                placeholder="Qty"
+                step={1}
+                placeholder="Ilość"
                 value={ing.quantity || ''}
                 onChange={(e) =>
                   updateIngredient(index, 'quantity', e.target.value === '' ? 0 : Number(e.target.value))
                 }
-                className="w-20 rounded border border-gray-300 px-2 py-2 text-base"
+                className="w-16 rounded border border-gray-300 px-2 py-2 text-base flex-shrink-0"
               />
               <select
                 value={ing.unit}
                 onChange={(e) => updateIngredient(index, 'unit', e.target.value as IngredientUnit)}
-                className="rounded border border-gray-300 px-2 py-2 text-base"
+                className="w-28 rounded border border-gray-300 px-2 py-2 text-base flex-shrink-0"
               >
-                <option value="grams">grams</option>
-                <option value="piece">piece</option>
+                <option value="grams">gramy</option>
+                <option value="piece">szt.</option>
+                <option value="tablespoon">łyżka</option>
+                <option value="teaspoon">łyżeczka</option>
+                <option value="pinch">szczypta</option>
               </select>
               <button
                 type="button"
                 onClick={() => removeIngredient(index)}
-                className="tap-target min-w-[44px] rounded border border-red-200 bg-red-50 px-2 py-2 text-red-700 hover:bg-red-100"
-                aria-label="Remove ingredient"
+                className="tap-target flex min-h-[44px] min-w-[44px] items-center justify-center rounded border border-red-200 bg-red-50 px-2 py-2 text-lg font-medium text-red-700 hover:bg-red-100 flex-shrink-0"
+                aria-label="Usuń składnik"
               >
-                Remove
+                ×
               </button>
             </div>
           ))}
@@ -140,7 +143,7 @@ export function RecipeForm({ initial, onSubmit, submitLabel }: RecipeFormProps) 
 
       <div>
         <label htmlFor="calories" className="block text-sm font-medium text-gray-700">
-          Calories
+          Kalorie
         </label>
         <input
           id="calories"
